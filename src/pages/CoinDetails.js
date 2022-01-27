@@ -1,23 +1,37 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
+import DOMPurify from "dompurify";
 import "./coinDetails.css";
 
 const CoinDetails = () => {
   const [coin, setCoin] = useState({});
+  const [loading, setLoading] = useState(true);
 
   const { coinId } = useParams();
 
   const url = `https://api.coingecko.com/api/v3/coins/${coinId}`;
 
   useEffect(() => {
+    setLoading(true);
+
     const fetchCoins = async () => {
-      const res = await axios.get(url);
-      setCoin(res.data);
+      try {
+        const res = await axios.get(url);
+        setLoading(false);
+
+        setCoin(res.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     fetchCoins();
-  }, []);
+  }, [url]);
+
+  if (loading) {
+    return <div className="loading"></div>;
+  }
 
   return (
     <div>
@@ -33,10 +47,10 @@ const CoinDetails = () => {
             <div className="coin-heading">
               <img src={coin.image?.small} alt="coinImg" />
               <p>{coin.name}</p>
-              <p>{coin.symbol}</p>
+              <p>{coin.symbol?.toUpperCase()}/USD</p>
             </div>
             <div className="coin-price">
-              <h1>{coin.market_data?.current_price?.usd}</h1>
+              <h1>${coin.market_data?.current_price?.usd.toLocaleString()}</h1>
             </div>
           </div>
         </div>
@@ -54,12 +68,43 @@ const CoinDetails = () => {
             </thead>
             <tbody>
               <tr>
-                <td>{coin.market_data?.price_change_1h_in_currency?.usd}</td>
-                <td>{coin.market_data?.price_change_24h_in_currency?.usd}</td>
-                <td>{coin.market_data?.price_change_7d_in_currency?.usd}</td>
-                <td>{coin.market_data?.price_change_14d_in_currency?.usd}</td>
-                <td>{coin.market_data?.price_change_30d_in_currency?.usd}</td>
-                <td>{coin.market_data?.price_change_1y_in_currency?.usd}</td>
+                <td>
+                  {coin.market_data?.price_change_percentage_1h_in_currency?.usd.toFixed(
+                    1
+                  )}
+                  %
+                </td>
+                <td>
+                  {coin.market_data?.price_change_percentage_24h_in_currency?.usd.toFixed(
+                    1
+                  )}
+                  %
+                </td>
+                <td>
+                  {coin.market_data?.price_change_percentage_7d_in_currency?.usd.toFixed(
+                    1
+                  )}
+                  %
+                </td>
+                <td>
+                  {coin.market_data?.price_change_percentage_14d_in_currency?.usd.toFixed(
+                    1
+                  )}
+                  %
+                </td>
+                <td>
+                  {
+                    coin.market_data?.price_change_percentage_30d_in_currency
+                      ?.usd
+                  }
+                  %
+                </td>
+                <td>
+                  {coin.market_data?.price_change_percentage_1y_in_currency?.usd.toFixed(
+                    1
+                  )}
+                  %
+                </td>
               </tr>
             </tbody>
           </table>
@@ -69,17 +114,17 @@ const CoinDetails = () => {
             <div className="left">
               <div className="row">
                 <h4>24 Hour Low</h4>
-                <p>{coin.market_data?.low_24h?.usd}</p>
+                <p>${coin.market_data?.low_24h?.usd.toLocaleString()}</p>
               </div>
               <div className="row">
                 <h4>24 Hour High</h4>
-                <p>{coin.market_data?.high_24h?.usd}</p>
+                <p>${coin.market_data?.high_24h?.usd.toLocaleString()}</p>
               </div>
             </div>
             <div className="right">
               <div className="row">
                 <h4>Market Cap</h4>
-                <p>{coin.market_data?.market_cap?.usd}</p>
+                <p>${coin.market_data?.market_cap?.usd.toLocaleString()}</p>
               </div>
               <div className="row">
                 <h4>Circulating Supply</h4>
@@ -91,7 +136,11 @@ const CoinDetails = () => {
         <div className="content">
           <div className="about">
             <h3>About</h3>
-            <p>{coin.description?.en}</p>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(coin.description?.en),
+              }}
+            ></p>
           </div>
         </div>
       </div>

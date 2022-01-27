@@ -10,14 +10,21 @@ import CoinDetails from "./pages/CoinDetails";
 function App() {
   const [coins, setCoins] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(true);
 
   const url =
     "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=100&page=1&sparkline=false";
 
   useEffect(() => {
+    setLoading(true);
     const fetchCoins = async () => {
-      const res = await axios.get(url);
-      setCoins(res.data);
+      try {
+        const res = await axios.get(url);
+        setLoading(false);
+        setCoins(res.data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     fetchCoins();
@@ -30,6 +37,10 @@ function App() {
   const filteredCoins = coins.filter((coin) =>
     coin.name.toLowerCase().includes(search.toLowerCase())
   );
+
+  if (loading) {
+    return <div className="loading"></div>;
+  }
 
   return (
     <div>

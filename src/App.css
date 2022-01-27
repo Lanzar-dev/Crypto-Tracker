@@ -39,5 +39,53 @@
 
 .coin-input::placeholder {
   color: #e2e2e2;
-  font-size: 16px;
+  font-size: 18px;
+}
+
+.loading {
+  margin: 200px auto;
+  border: 14px solid #f3f3f3;
+  border-radius: 50%;
+  border-top: 14px solid #6900ff;
+  width: 100px;
+  height: 100px;
+  -webkit-animation: spin 2s linear infinite; /* Safari */
+  animation: spin 2s linear infinite;
+}
+
+/* Safari */
+@-webkit-keyframes spin {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  100% {
+    -webkit-transform: rotate(360deg);
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+@media screen and (max-width: 700px) {
+  .coin-input {
+    padding-left: 15px;
+    width: 250px;
+    height: 40px;
+    border-radius: 4px;
+  }
+
+  .coin-input::placeholder {
+    font-size: 16px;
+  }
+
+  .loading {
+    width: 80px;
+    height: 80px;
+  }
 }

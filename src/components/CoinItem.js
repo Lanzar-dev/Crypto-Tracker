@@ -21,8 +21,8 @@ const CoinItem = ({
       <p className={`${priceChange < 0 ? "red" : "green"}`}>
         {priceChange.toFixed(2)}%
       </p>
-      <p>${totalVolume.toLocaleString()}</p>
-      <p>${marketCap.toLocaleString()}</p>
+      <p className="hide-mobile">${totalVolume.toLocaleString()}</p>
+      <p className="hide-mobile">${marketCap.toLocaleString()}</p>
     </div>
   );
 };
