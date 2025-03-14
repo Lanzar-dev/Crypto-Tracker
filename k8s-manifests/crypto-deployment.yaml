@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: crypto
+spec:
+  selector:
+    matchLabels:
+      app: crypto
+  replicas: 1 # tells deployment to run 1 pod matching the template
+  template:
+    metadata:
+      labels:
+        app: crypto
+    spec:
+      containers:
+        - name: crypto
+          image: cryptotrackeracr.azurecr.io/<repository>:<imagetag>
+          ports:
+            - containerPort: 80
+              name: crypto
