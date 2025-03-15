@@ -10,7 +10,7 @@ variables:
   # Container registry service connection established during pipeline creation
   dockerRegistryServiceConnection: '8b55806f-76f1-4978-bba0-85514447cf7b'
   imageRepository: 'cryptotracker'
-  containerRegistry: '<docker registry>'
+  containerRegistry: 'cryptotrackeracr.azurecr.io'
   dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
   tag: '$(Build.BuildId)'
 
@@ -30,7 +30,7 @@ stages:
         containerRegistry: '$(dockerRegistryServiceConnection)'
         repository: '$(imageRepository)'
         command: 'build'
-        Dockerfile: '**/Dockerfile'
+        Dockerfile: 'Dockerfile'
         tags: '$(tag)'
 - stage: Push
   displayName: Push stage
