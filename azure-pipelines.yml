@@ -45,3 +45,14 @@ stages:
         repository: '$(imageRepository)'
         command: 'push'
         tags: '$(tag)'
+- stage: Update_Manifest
+  dependsOn: Push
+  displayName: Update Manifest stage
+  jobs:
+  - job: Update_Manifest
+    displayName: Update Manifest stage
+    steps:
+    - task: Bash@3
+      inputs:
+        filePath: 'scripts/update-image.sh'
+        arguments: '$(containerRegistry) $(imageRepository) $(tag)'
