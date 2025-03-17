@@ -11,7 +11,11 @@ NEW_IMAGE_TAG="$CONTAINER_REGISTRY/$IMAGE_REPOSITORY:$TAG"
 
 echo "Updating Kubernetes manifests with new image tag: $NEW_IMAGE_TAG"
 
+# Ensure we are on the correct branch
 git checkout master
+
+# Pull the latest changes to avoid conflicts
+git pull origin master --rebase
 
 # Update image in Kubernetes manifests
 sed -i "s|image: cryptotrackeracr.azurecr.io/cryptotracker:.*|image: $NEW_IMAGE_TAG|g" $K8S_MANIFEST_DIR/*.yaml
