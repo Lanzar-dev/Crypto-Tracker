@@ -4,58 +4,58 @@ trigger:
       - src/*
 
 resources:
-- repo: self
+  - repo: self
 
 variables:
   # Container registry service connection established during pipeline creation
-  dockerRegistryServiceConnection: '8b55806f-76f1-4978-bba0-85514447cf7b'
-  imageRepository: 'cryptotracker'
-  containerRegistry: 'cryptotrackeracr.azurecr.io'
-  dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
-  tag: '$(Build.BuildId)'
+  dockerRegistryServiceConnection: "<Container registry service connection>"
+  imageRepository: "cryptotracker"
+  containerRegistry: "<docker registry>"
+  dockerfilePath: "$(Build.SourcesDirectory)/Dockerfile"
+  tag: "$(Build.BuildId)"
 
 pool:
   name: "cryptotrackeragent"
 
 stages:
-- stage: Build
-  displayName: Build stage
-  jobs:
-  - job: Build
-    displayName: Build
-    steps:
-    - task: Docker@2
-      displayName: Build docker image
-      inputs:
-        containerRegistry: '$(dockerRegistryServiceConnection)'
-        repository: '$(imageRepository)'
-        command: 'build'
-        Dockerfile: 'Dockerfile'
-        tags: '$(tag)'
-- stage: Push
-  displayName: Push stage
-  jobs:
-  - job: Push
-    displayName: Push
-    steps:
-    - task: Docker@2
-      displayName: Push image to container registry
-      inputs:
-        containerRegistry: '$(dockerRegistryServiceConnection)'
-        repository: '$(imageRepository)'
-        command: 'push'
-        tags: '$(tag)'
-- stage: Update_Manifest
-  dependsOn: Push
-  displayName: Update Manifest stage
-  jobs:
-  - job: Update_Manifest
+  - stage: Build
+    displayName: Build stage
+    jobs:
+      - job: Build
+        displayName: Build
+        steps:
+          - task: Docker@2
+            displayName: Build docker image
+            inputs:
+              containerRegistry: "$(dockerRegistryServiceConnection)"
+              repository: "$(imageRepository)"
+              command: "build"
+              Dockerfile: "Dockerfile"
+              tags: "$(tag)"
+  - stage: Push
+    displayName: Push stage
+    jobs:
+      - job: Push
+        displayName: Push
+        steps:
+          - task: Docker@2
+            displayName: Push image to container registry
+            inputs:
+              containerRegistry: "$(dockerRegistryServiceConnection)"
+              repository: "$(imageRepository)"
+              command: "push"
+              tags: "$(tag)"
+  - stage: Update_Manifest
+    dependsOn: Push
     displayName: Update Manifest stage
-    steps:
-    - checkout: self
-      persistCredentials: true  # Ensures Git can push without asking for a password
-      fetchDepth: 0  # Fetch all history to avoid detached HEAD issues
-    - task: Bash@3
-      inputs:
-        filePath: 'scripts/update-image.sh'
-        arguments: '$(containerRegistry) $(imageRepository) $(tag)'
+    jobs:
+      - job: Update_Manifest
+        displayName: Update Manifest stage
+        steps:
+          - checkout: self
+            persistCredentials: true # Ensures Git can push without asking for a password
+            fetchDepth: 0 # Fetch all history to avoid detached HEAD issues
+          - task: Bash@3
+            inputs:
+              filePath: "scripts/update-image.sh"
+              arguments: "$(containerRegistry) $(imageRepository) $(tag)"

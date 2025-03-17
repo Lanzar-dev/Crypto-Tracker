@@ -18,7 +18,7 @@ git checkout master
 git pull origin master --rebase
 
 # Update image in Kubernetes manifests
-sed -i "s|image: cryptotrackeracr.azurecr.io/cryptotracker:.*|image: $NEW_IMAGE_TAG|g" $K8S_MANIFEST_DIR/*.yaml
+sed -i "s|image: <Container registry>/<repository name>:.*|image: $NEW_IMAGE_TAG|g" $K8S_MANIFEST_DIR/*.yaml
 
 echo "Committing and pushing changes to Git..."
 
