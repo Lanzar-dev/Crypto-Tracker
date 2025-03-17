@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: crypto
-          image: cryptotrackeracr.azurecr.io/cryptotracker:195
+          image: cryptotrackeracr.azurecr.io/cryptotracker:196
           ports:
             - containerPort: 80
               name: crypto
