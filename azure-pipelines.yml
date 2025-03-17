@@ -52,6 +52,9 @@ stages:
   - job: Update_Manifest
     displayName: Update Manifest stage
     steps:
+    - checkout: self
+      persistCredentials: true  # Ensures Git can push without asking for a password
+      fetchDepth: 0  # Fetch all history to avoid detached HEAD issues
     - task: Bash@3
       inputs:
         filePath: 'scripts/update-image.sh'
