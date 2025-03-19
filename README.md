@@ -59,7 +59,7 @@ crypto-Tracker\
 ### Clone the Repository
 
 ```
-git clone https://github.com/your-username/crypto-tracker.git
+git clone https://github.com/Lanzar-dev/Crypto-Tracker.git
 cd crypto-tracker
 ```
 
