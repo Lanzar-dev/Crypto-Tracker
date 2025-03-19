@@ -112,4 +112,4 @@ kubectl apply -n argocd -f https://raw.githubusercontent.com/argoproj/argo-cd/st
 
 ## 🌍 Live Demo
 
-### 🔗 Check out the site: [crypto-coins-tracker](https://crypto-coins-tracker.vercel.app/)
+#### 🔗 Check out the site: [crypto-coins-tracker](https://crypto-coins-tracker.vercel.app/)
